@@ -182,9 +182,11 @@
   tempoSlider.addEventListener('input', ()=>{
     state.bpm = parseInt(tempoSlider.value,10);
     tempoValue.textContent = state.bpm;
+    saveAutosave();
   });
   instrumentSelect.addEventListener('change', ()=>{
     state.instrument = instrumentSelect.value;
+    saveAutosave();
   });
   function syncControlsFromState(){
     tempoSlider.value = state.bpm;
@@ -196,6 +198,35 @@
   const STORAGE_KEY = 'notecraft_sheets_v1';
   function getSheets(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||[]; }catch(e){ return []; } }
   function setSheets(sheets){ localStorage.setItem(STORAGE_KEY, JSON.stringify(sheets)); }
+
+  /* ============ Session autosave ============ */
+  const AUTOSAVE_KEY = 'notecraft_autosave_v1';
+  let autosaveTimer = null;
+  function saveAutosave(){
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(()=>{
+      try{
+        localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({
+          title: currentTitle,
+          clef: state.clef, timeSig: state.timeSig, keySig: state.keySig,
+          bpm: state.bpm, instrument: state.instrument,
+          notes: state.notes.map(n=>({posIndex:n.posIndex, duration:n.duration, accidental:n.accidental||0}))
+        }));
+      }catch(e){}
+    }, 300);
+  }
+  function restoreAutosave(){
+    let saved;
+    try{ saved = JSON.parse(localStorage.getItem(AUTOSAVE_KEY)); }catch(e){ return; }
+    if(!saved) return;
+    currentTitle = saved.title || '';
+    state.clef = saved.clef || 'treble';
+    state.timeSig = saved.timeSig || [4,4];
+    state.keySig = saved.keySig || 0;
+    state.bpm = saved.bpm || 120;
+    state.instrument = saved.instrument || 'synthlead';
+    state.notes = (saved.notes||[]).map(n=>({id:uid(), posIndex:n.posIndex, duration:n.duration, accidental:n.accidental||0}));
+  }
 
   saveSheetBtn.addEventListener('click', ()=>{
     saveTitleInput.value = currentTitle || '';
@@ -216,6 +247,7 @@
     sheets.unshift(sheet);
     setSheets(sheets);
     currentTitle = title;
+    saveAutosave();
     closeAllModals();
     closeDrawer();
   });
@@ -428,6 +460,8 @@
     bar2.setAttribute('y1',staffTopY); bar2.setAttribute('y2',staffBottomY);
     bar2.setAttribute('class','end-bar'); bar2.setAttribute('stroke-width','3');
     svg.appendChild(bar2);
+
+    saveAutosave();
   }
 
   function renderNoteGroup(note){
@@ -847,6 +881,7 @@
   exportMidiBtn.addEventListener('click', exportMidi);
 
   /* ============ Init ============ */
+  restoreAutosave();
   syncControlsFromState();
   renderStaff();
 })();
