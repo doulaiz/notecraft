@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>NoteCraft</title>
+<link rel="stylesheet" href="notecraft.css">
+</head>
+<body>
+
+<header class="topbar">
+  <button id="hamburgerBtn" class="icon-btn" aria-label="Open menu">
+    <span class="hamburger-icon"><span></span><span></span><span></span></span>
+  </button>
+  <div class="logo">🎼 NoteCraft</div>
+  <div class="topbar-spacer"></div>
+</header>
+
+<div id="overlay" class="overlay hidden"></div>
+
+<nav id="drawer" class="drawer" aria-label="Composition controls">
+  <div class="drawer-header">
+    <h2>Controls</h2>
+    <button id="closeDrawerBtn" class="icon-btn" aria-label="Close menu">✕</button>
+  </div>
+
+  <div class="drawer-section">
+    <label for="tempoSlider">Tempo: <span id="tempoValue">120</span> BPM</label>
+    <input type="range" id="tempoSlider" min="40" max="240" value="120" step="1">
+  </div>
+
+  <div class="drawer-section">
+    <label for="instrumentSelect">Sound Instrument</label>
+    <select id="instrumentSelect">
+      <option value="synthlead">Synth Lead</option>
+      <option value="piano">Piano</option>
+      <option value="sine">Sine Wave</option>
+    </select>
+  </div>
+
+  <div class="drawer-section">
+    <h3>Composition Library</h3>
+    <button id="saveSheetBtn" class="btn">💾 Save Sheet</button>
+    <button id="mySheetsBtn" class="btn secondary">📂 My Sheets</button>
+    <button id="exportMidiBtn" class="btn secondary">⬇️ Export MIDI</button>
+    <button id="newSheetBtn" class="btn danger">🆕 New Sheet</button>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="staff-scroll" id="staffScroll">
+    <svg id="staffSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+  <p class="hint">Double-tap / double-click the staff to add a note &middot; tap a note to change its duration &middot; drag a note up/down to change pitch &middot; tap the clef, time signature, or the zone right after it (key signature) to change them.</p>
+</main>
+
+<div class="quick-toolbar" role="toolbar" aria-label="Playback controls">
+  <button id="playPauseBtn" class="fab" aria-label="Play">▶</button>
+  <button id="stopBtn" class="fab hidden" aria-label="Stop">⏹</button>
+</div>
+
+<!-- Modals -->
+<div id="modalBackdrop" class="modal-backdrop hidden"></div>
+
+<div id="clefModal" class="modal hidden" role="dialog" aria-label="Select clef">
+  <h3>Select Clef</h3>
+  <button class="modal-option" data-clef="treble">Treble Clef (𝄞)</button>
+  <button class="modal-option" data-clef="bass">Bass Clef (𝄢)</button>
+  <button class="modal-cancel" data-close="clefModal">Cancel</button>
+</div>
+
+<div id="timeSigModal" class="modal hidden" role="dialog" aria-label="Select time signature">
+  <h3>Select Time Signature</h3>
+  <button class="modal-option" data-sig="4,4">4/4</button>
+  <button class="modal-option" data-sig="3,4">3/4</button>
+  <button class="modal-option" data-sig="2,4">2/4</button>
+  <button class="modal-option" data-sig="6,8">6/8</button>
+  <button class="modal-cancel" data-close="timeSigModal">Cancel</button>
+</div>
+
+<div id="keySigModal" class="modal modal-large hidden" role="dialog" aria-label="Select key signature">
+  <div class="modal-header-row">
+    <h3>Key Signature</h3>
+    <button class="icon-btn" data-close="keySigModal" aria-label="Close">✕</button>
+  </div>
+  <div id="keySigOptions" class="sheets-list"></div>
+</div>
+
+<div id="saveModal" class="modal hidden" role="dialog" aria-label="Save sheet">
+  <h3>Save Sheet</h3>
+  <input type="text" id="saveTitleInput" placeholder="Composition title" maxlength="40">
+  <div class="modal-actions">
+    <button id="saveConfirmBtn" class="btn">Save</button>
+    <button class="modal-cancel btn secondary" data-close="saveModal">Cancel</button>
+  </div>
+</div>
+
+<div id="sheetsModal" class="modal modal-large hidden" role="dialog" aria-label="My sheets">
+  <div class="modal-header-row">
+    <h3>My Sheets</h3>
+    <button class="icon-btn" data-close="sheetsModal" aria-label="Close">✕</button>
+  </div>
+  <div id="sheetsList" class="sheets-list"></div>
+</div>
+
+<script src="notecraft.js" defer></script>
+</body>
+</html>
