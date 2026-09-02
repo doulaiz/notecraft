@@ -1,8 +1,10 @@
 # NoteCraft
 
-NoteCraft is a mobile-first, single-page sheet music composer that runs entirely in the browser — no build step, no backend, no dependencies. Sketch a melody on an interactive staff, hear it played back instantly, and export it as a standard MIDI file.
+**[Try the live demo →](https://doulaiz.github.io/notecraft/)**
 
-This project was vibe-coded with [Claude](https://claude.com) (via Claude Code) in a single conversational session.
+NoteCraft is a single-page sheet music composer that runs entirely in the browser — no build step, no backend, no dependencies. Sketch a melody on an interactive staff, hear it played back instantly, and export it as a standard MIDI file.
+
+This project was vibe-coded with [Claude](https://claude.com) (via Claude Code).
 
 ## Features
 
